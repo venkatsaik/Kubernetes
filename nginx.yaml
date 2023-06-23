@@ -1,0 +1,45 @@
+#There is both service and deployment configuration defined in the same yaml file.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+---
+apiVersion: apps/v1
+#creates a deployment.
+kind: Deployment
+metadata:
+#Name of the deployment
+  name: nginx
+spec:
+  replicas: 5
+  selector:
+#matchLabels labels makes sure that the pods creating are maintained and managed by the same deployment. 
+    matchLabels:
+      app: nginx
+  
+#templeate for the pods.
+  template:
+    metadata:
+#the label is same as the one declared in matchLabels as we want the pods to be maintained by the same deployment delacred above.
+      labels:
+        app: nginx
+    
+#specs of the contianer and image.
+    spec:
+      containers:
+      - name: nginx
+  
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 80

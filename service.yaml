@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mynodejs-k8s
+spec:
+  type: LoadBalancer
+  selector:
+    app: mynodejs-k8s
+  ports:
+  - port: 3030
+    targetPort: 3000

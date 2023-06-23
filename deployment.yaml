@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+#creates a deployment.
+kind: Deployment
+metadata:
+#Name of the deployment
+  name: mynodejs-k8s
+spec:
+  replicas: 5
+  selector:
+#matchLabels labels makes sure that the pods creating are maintained and managed by the same deployment. 
+    matchLabels:
+      app: mynodejs-k8s
+#templeate for the pods.
+  template:
+    metadata:
+#the label is same as the one declared in matchLabels as we want the pods to be maintained by the same deployment delacred above.
+      labels:
+        app: mynodejs-k8s
+#specs of the contianer and image.
+    spec:
+      containers:
+      - name: mynodejs-k8s
+        image: venkatsai01/k8s-nodejs-image:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 3000

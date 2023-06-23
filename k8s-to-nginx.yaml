@@ -1,0 +1,46 @@
+#There is both service and deployment configuration defined in the same yaml file.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-to-nginx
+spec:
+  type: LoadBalancer
+  selector:
+    app: k8s-to-nginx
+  ports:
+  - port: 3333
+    targetPort: 3000
+---
+apiVersion: apps/v1
+#creates a deployment.
+kind: Deployment
+metadata:
+#Name of the deployment
+  name: k8s-to-nginx
+spec:
+  replicas: 3
+  selector:
+#matchLabels labels makes sure that the pods creating are maintained and managed by the same deployment. 
+    matchLabels:
+      app: k8s-to-nginx
+  
+#templeate for the pods.
+  template:
+    metadata:
+#the label is same as the one declared in matchLabels as we want the pods to be maintained by the same deployment delacred above.
+      labels:
+        app: k8s-to-nginx
+    
+#specs of the contianer and image.
+    spec:
+      containers:
+      - name: k8s-to-nginx
+  
+        image: venkatsai01/k8s-to-nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 3000
